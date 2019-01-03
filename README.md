@@ -1,5 +1,5 @@
 # RS038-pregledac-testova
-##Pregledac testova
+## Pregledac testova
 Program koji na osnovu ulaza, koji je u vidu fotografije i predstavlja multiple choice answer sheet, racuna koliko je student imao tacnih odgovora i koju ocenu je dobio. Problem se resava koristeci OMR - Optical Mark Recognition. Proces se zasniva na prikupljanju podataka prepoznavajuci delove koji su oznaceni na dokumentu koji se analizira.
 
 
