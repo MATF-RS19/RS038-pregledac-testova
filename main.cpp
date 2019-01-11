@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include "image_processing.hpp"
 
 //funkcija za proveru gresaka
 void check_error(int expr, std::string & msg){
@@ -27,7 +28,16 @@ int main(int argc, char* argv[]){
     //prikaz i resize prozora
     cv::resizeWindow("image", 600,600);
     cv::imshow("image", img);
+    
+    //binarizacija
+    cv::Mat img_b = binarizacija(img);
+    cv::namedWindow("image_b", CV_WINDOW_NORMAL);
+    cv::resizeWindow("image_b", 600,600);
+    cv::imshow("image_b", img_b);
+
     cv::waitKey();
+
+
 
     return 0;
 }
