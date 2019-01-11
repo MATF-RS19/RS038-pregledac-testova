@@ -22,22 +22,15 @@ int main(int argc, char* argv[]){
 
     //ucitavanje slike i kreiranje prozora
     cv::Mat img = cv::imread(argv[1], 0);
-    cv::namedWindow("image", CV_WINDOW_NORMAL);
-
-
+    
     //prikaz i resize prozora
+    cv::namedWindow("image", CV_WINDOW_NORMAL);
     cv::resizeWindow("image", 600,600);
     cv::imshow("image", img);
-    
-    //binarizacija
-    cv::Mat img_b = binarizacija(img);
-    cv::namedWindow("image_b", CV_WINDOW_NORMAL);
-    cv::resizeWindow("image_b", 600,600);
-    cv::imshow("image_b", img_b);
+
+    izolovanje_pravougaonika(img);
 
     cv::waitKey();
-
-
 
     return 0;
 }
