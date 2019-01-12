@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -g
-SRCS = main.cpp image_processing.cpp
+SRCS = main.cpp image_processing.cpp handler.cpp
 PROG = pregledac
 
 OPENCV = `pkg-config opencv --cflags --libs`
