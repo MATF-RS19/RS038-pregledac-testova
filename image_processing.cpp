@@ -111,9 +111,9 @@ void izolovanje_pravougaonika(cv::Mat & img){
 
     //detektovanje centra kruga
     cv::Mat cimg;
-    cvtColor(kvadrat,kvadrat_bin, CV_BGR2GRAY);
+    cvtColor(kvadrat,cimg, CV_BGR2GRAY);
     std::vector<cv::Vec3f> krugovi;  
-    HoughCircles(kvadrat_bin, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );  
+    HoughCircles(cimg, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );  
     for( size_t i = 0; i < krugovi.size(); i++ ){  
         cv::Point center(cvRound(krugovi[i][0]), cvRound(krugovi[i][1]));
         // circle center  
@@ -123,7 +123,5 @@ void izolovanje_pravougaonika(cv::Mat & img){
     cv::namedWindow("Centar kruga", CV_WINDOW_NORMAL);
     cv::resizeWindow("Centar kruga",600,600);
     cv::imshow("Centar kruga",kvadrat);
-    cv::waitKey();
 
-    
 }
