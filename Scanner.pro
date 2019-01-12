@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Scanner
 TEMPLATE = app
 
-
 SOURCES +=\
         mainwindow.cpp \
     waiting.cpp \
@@ -27,5 +26,6 @@ FORMS    += mainwindow.ui
 
 INCLUDEPATH += /usr/local/include/opencv
 LIBS += -L/usr/local/lib `pkg-config opencv --cflags --libs`
+
 
 
