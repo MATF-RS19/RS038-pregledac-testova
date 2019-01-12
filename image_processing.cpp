@@ -121,47 +121,47 @@ void izolovanje_pravougaonika(cv::Mat & img){
         circle(kvadrat, centar, 3, cv::Scalar(0,255,0), -1, 8, 0 );
     }
 
-    double averR = 0;
+    double prosek_r = 0;
     std::vector<double> row;
     std::vector<double> col;
 
     for( size_t i = 0; i < krugovi.size(); i++) {
         
-        bool found = false;
+        bool nadjeno = false;
         int r = cvRound(krugovi[i][2]);
-        averR += r;
+        prosek_r += r;
         int x = cvRound(krugovi[i][0]);
         int y = cvRound(krugovi[i][1]);
 
         for(int j = 0; j < row.size(); j++) {
             double y2 = row[j];
             if(y - r < y2 && y + r > y2) {
-                found = true;
+                nadjeno = true;
                 break;
             }
         }
-        if(!found){
+        if(!nadjeno){
             row.push_back(y);
         }
-        found = false;
+        nadjeno = false;
         for(int j=0;j<col.size();j++){
             double x2 = col[j];
             if(x - r < x2 && x + r > x2){
-                found = true;
+                nadjeno = true;
                 break;
             }
         }
-        if(!found){
+        if(!nadjeno){
             col.push_back(x);
         }
     }
 
-    averR /= krugovi.size();
+    prosek_r /= krugovi.size();
 
     std::sort(row.begin(),row.end(),comparator2);
     std::sort(col.begin(),col.end(),comparator2);
 
-    for(int i = 0; i < row.size(); i++) {
+    for( int i = 0; i < row.size(); i++) {
         
         double max = 0;
         double y = row[i];
@@ -170,32 +170,32 @@ void izolovanje_pravougaonika(cv::Mat & img){
         for(int j = 0; j < col.size(); j++) {
             double x = col[j];
             cv::Point c(x,y);
-            //Use an actual circle if it exists
 
-            for(int k=0;k<krugovi.size();k++){
+            for(int k = 0; k < krugovi.size(); k++){
             
                 double x2 = krugovi[k][0];
                 double y2 = krugovi[k][1];
             
-                if(abs(y2-y)<averR && abs(x2-x)<averR){
+                if(abs(y2-y)<prosek_r && abs(x2-x)<prosek_r){
                     x = x2;
                     y = y2;
                 }
             }
 
-            // circle outline
-            cv::circle(kvadrat, c, averR, cv::Scalar(0,0,255), 3, 8, 0 );
-            cv::Rect rect(x-averR, y-averR, 2*averR, 2*averR);
-            cv::Mat submat = krugovi_img(rect);
-            double p =(double)countNonZero(submat) / (submat.size().width * submat.size().height);
-            
+            cv::circle(kvadrat, c, prosek_r, cv::Scalar(0,0,255), 3, 8, 0 );
+            cv::Rect rect(x-prosek_r, y-prosek_r, 2*prosek_r, 2*prosek_r);
+            cv::Mat submat = kvadrat_bin(rect);
+            double p = (double)countNonZero(submat) / (submat.size().width * submat.size().height);
+            //detekcija popunjenosti kruga(ako je veca od 37.5 posto smatra se zaokruzenim resenjem)
             if( p >= 0.375 && p > max){
                 max = p;
                 ind = j;
             }
         }
-        if(ind == -1) 
+        //stampanje resenja
+        if(ind == -1) {
             printf("%d:-",i+1);
+        }
         else 
             printf("%d:%c",i+1,'A'+ind);
         std::cout << std::endl;
