@@ -125,7 +125,7 @@ void izolovanje_pravougaonika(cv::Mat & img){
     std::vector<double> row;
     std::vector<double> col;
 
-    for( size_t i = 0; i < krugovi.size(); i++) {
+    for(int i = 0; i < krugovi.size(); i++) {
         
         bool found = false;
         int r = cvRound(krugovi[i][2]);
@@ -170,7 +170,6 @@ void izolovanje_pravougaonika(cv::Mat & img){
         for(int j = 0; j < col.size(); j++) {
             double x = col[j];
             cv::Point c(x,y);
-            //Use an actual circle if it exists
 
             for(int k=0;k<krugovi.size();k++){
             
@@ -183,7 +182,6 @@ void izolovanje_pravougaonika(cv::Mat & img){
                 }
             }
 
-            // circle outline
             cv::circle(kvadrat, c, averR, cv::Scalar(0,0,255), 3, 8, 0 );
             cv::Rect rect(x-averR, y-averR, 2*averR, 2*averR);
             cv::Mat submat = krugovi_img(rect);
