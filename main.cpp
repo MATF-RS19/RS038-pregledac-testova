@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <string>
 #include "image_processing.hpp"
-
 //funkcija za proveru gresaka
 void check_error(int expr, std::string & msg){
     if(!(expr)){
