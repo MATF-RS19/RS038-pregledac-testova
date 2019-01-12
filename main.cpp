@@ -31,9 +31,9 @@ int main(int argc, char* argv[]){
     cv::Mat img = cv::imread(argv[1], 0);
     
     //prikaz i resize prozora
-    cv::namedWindow("image", CV_WINDOW_NORMAL);
-    cv::resizeWindow("image", 600,600);
-    cv::imshow("image", img);
+    //cv::namedWindow("image", CV_WINDOW_NORMAL);
+    //cv::resizeWindow("image", 600,600);
+    //cv::imshow("image", img);
 
     izolovanje_pravougaonika(img);
 

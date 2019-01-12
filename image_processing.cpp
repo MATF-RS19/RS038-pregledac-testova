@@ -64,6 +64,8 @@ void izolovanje_pravougaonika(cv::Mat & img){
     cv::Mat img_raw;
     cv::cvtColor(img, img_raw, CV_GRAY2RGB);
 
+    cv::imwrite("ucitani_fajl.jpg",img);
+
     img = binarizacija(img);
 
     //trazimo linije cetvorougla tj okvir testa
@@ -100,14 +102,14 @@ void izolovanje_pravougaonika(cv::Mat & img){
     cv::Mat transmtx = cv::getPerspectiveTransform(coskovi, kvadrat_pts);
     cv::warpPerspective(img_raw, kvadrat, transmtx, kvadrat.size());
 
+    cv::imwrite("perspektiva.jpg",kvadrat);
+
     //cuvamo binarnu kopiju ispravljene slike..
     cv::Mat kvadrat_bin;
     cv::cvtColor(kvadrat, kvadrat_bin ,CV_BGR2GRAY);
     kvadrat_bin = binarizacija(kvadrat_bin);
     
-    cv::namedWindow("image_b", CV_WINDOW_NORMAL);
-    cv::resizeWindow("image_b", 600,600);
-    cv::imshow("image_b", kvadrat_bin);
+    cv::imwrite("binarizacija.jpg", kvadrat_bin);
 
     //detektovanje centra kruga
     cv::Mat krugovi_img;
@@ -120,12 +122,13 @@ void izolovanje_pravougaonika(cv::Mat & img){
         // centar kruga  
         circle(kvadrat, centar, 3, cv::Scalar(0,255,0), -1, 8, 0 );
     }
+    cv::imwrite("detektovan_centar.jpg",kvadrat);
 
     double prosek_r = 0;
     std::vector<double> row;
     std::vector<double> col;
 
-    for( size_t i = 0; i < krugovi.size(); i++) {
+    for(int i = 0; i < krugovi.size(); i++) {
         
         bool nadjeno = false;
         int r = cvRound(krugovi[i][2]);
@@ -202,8 +205,9 @@ void izolovanje_pravougaonika(cv::Mat & img){
     }
 
 
-    cv::namedWindow("Centar kruga", CV_WINDOW_NORMAL);
-    cv::resizeWindow("Centar kruga",600,600);
-    cv::imshow("Centar kruga",kvadrat);
+    //cv::namedWindow("Centar kruga", CV_WINDOW_NORMAL);
+    //cv::resizeWindow("Centar kruga",600,600);
+    //cv::imshow("Centar kruga",kvadrat);
+    cv::imwrite("final.jpg",kvadrat);
 
 }
