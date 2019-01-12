@@ -110,15 +110,97 @@ void izolovanje_pravougaonika(cv::Mat & img){
     cv::imshow("image_b", kvadrat_bin);
 
     //detektovanje centra kruga
-    cv::Mat cimg;
-    cvtColor(kvadrat,cimg, CV_BGR2GRAY);
+    cv::Mat krugovi_img;
+    cvtColor(kvadrat, krugovi_img, CV_BGR2GRAY);
     std::vector<cv::Vec3f> krugovi;  
-    HoughCircles(cimg, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );  
+    HoughCircles(krugovi_img, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );  
+    
     for( size_t i = 0; i < krugovi.size(); i++ ){  
-        cv::Point center(cvRound(krugovi[i][0]), cvRound(krugovi[i][1]));
-        // circle center  
-        circle(kvadrat, center, 3, cv::Scalar(0,255,0), -1, 8, 0 );
+        cv::Point centar(cvRound(krugovi[i][0]), cvRound(krugovi[i][1]));
+        // centar kruga  
+        circle(kvadrat, centar, 3, cv::Scalar(0,255,0), -1, 8, 0 );
     }
+
+    double averR = 0;
+    std::vector<double> row;
+    std::vector<double> col;
+
+    for( size_t i = 0; i < krugovi.size(); i++) {
+        
+        bool found = false;
+        int r = cvRound(krugovi[i][2]);
+        averR += r;
+        int x = cvRound(krugovi[i][0]);
+        int y = cvRound(krugovi[i][1]);
+
+        for(int j = 0; j < row.size(); j++) {
+            double y2 = row[j];
+            if(y - r < y2 && y + r > y2) {
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            row.push_back(y);
+        }
+        found = false;
+        for(int j=0;j<col.size();j++){
+            double x2 = col[j];
+            if(x - r < x2 && x + r > x2){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            col.push_back(x);
+        }
+    }
+
+    averR /= krugovi.size();
+
+    std::sort(row.begin(),row.end(),comparator2);
+    std::sort(col.begin(),col.end(),comparator2);
+
+    for(int i = 0; i < row.size(); i++) {
+        
+        double max = 0;
+        double y = row[i];
+        int ind = -1;
+    
+        for(int j = 0; j < col.size(); j++) {
+            double x = col[j];
+            cv::Point c(x,y);
+            //Use an actual circle if it exists
+
+            for(int k=0;k<krugovi.size();k++){
+            
+                double x2 = krugovi[k][0];
+                double y2 = krugovi[k][1];
+            
+                if(abs(y2-y)<averR && abs(x2-x)<averR){
+                    x = x2;
+                    y = y2;
+                }
+            }
+
+            // circle outline
+            cv::circle(kvadrat, c, averR, cv::Scalar(0,0,255), 3, 8, 0 );
+            cv::Rect rect(x-averR, y-averR, 2*averR, 2*averR);
+            cv::Mat submat = krugovi_img(rect);
+            double p =(double)countNonZero(submat) / (submat.size().width * submat.size().height);
+            
+            if( p >= 0.375 && p > max){
+                max = p;
+                ind = j;
+            }
+        }
+        if(ind == -1) 
+            printf("%d:-",i+1);
+        else 
+            printf("%d:%c",i+1,'A'+ind);
+        std::cout << std::endl;
+    }
+
 
     cv::namedWindow("Centar kruga", CV_WINDOW_NORMAL);
     cv::resizeWindow("Centar kruga",600,600);
