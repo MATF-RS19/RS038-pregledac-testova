@@ -15,7 +15,7 @@ cv::Mat binarizacija(cv::Mat &img){
 
 //funkcija preuzeta sa interneta, vraca tacku preseka 2 prave
 cv::Point2f izracunajPresek(cv::Vec4i a, cv::Vec4i b) {
-    
+
     int x1 = a[0], y1 = a[1], x2 = a[2], y2 = a[3];
     int x3 = b[0], y3 = b[1], x4 = b[2], y4 = b[3];
 
@@ -25,7 +25,7 @@ cv::Point2f izracunajPresek(cv::Vec4i a, cv::Vec4i b) {
         pt.x = ((x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4)) / d;
         pt.y = ((x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4)) / d;
         return pt;
-    } 
+    }
     else
         return cv::Point2f(-1, -1);
 }
@@ -51,7 +51,7 @@ void sortirajCoskove(std::vector<cv::Point2f>& coskovi, cv::Point2f centar) {
     cv::Point2f gd = gore[gore.size()-1];
     cv::Point2f dl = dole[0];
     cv::Point2f dd = dole[dole.size()-1];
-    
+
     coskovi.clear();
     coskovi.push_back(gl);
     coskovi.push_back(gd);
@@ -91,7 +91,7 @@ std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img){
 
     sortirajCoskove(coskovi, centar);
 
-    //formiramo novi kvadrat koji nije warp-ovan u prostoru 
+    //formiramo novi kvadrat koji nije warp-ovan u prostoru
     cv::Rect r = cv::boundingRect(coskovi);
     cv::Mat kvadrat = cv::Mat::zeros(r.height, r.width, CV_8UC3);
     std::vector<cv::Point2f> kvadrat_pts;
@@ -110,18 +110,18 @@ std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img){
     cv::Mat kvadrat_bin;
     cv::cvtColor(kvadrat, kvadrat_bin ,CV_BGR2GRAY);
     kvadrat_bin = binarizacija(kvadrat_bin);
-    
+
     cv::imwrite("binarizacija.jpg", kvadrat_bin);
 
     //detektovanje centra kruga
     cv::Mat krugovi_img;
     cvtColor(kvadrat, krugovi_img, CV_BGR2GRAY);
-    std::vector<cv::Vec3f> krugovi;  
-    HoughCircles(krugovi_img, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );  
-    
-    for( size_t i = 0; i < krugovi.size(); i++ ){  
+    std::vector<cv::Vec3f> krugovi;
+    HoughCircles(krugovi_img, krugovi, CV_HOUGH_GRADIENT, 1, img.rows/8, 100, 75, 0, 0 );
+
+    for( size_t i = 0; i < krugovi.size(); i++ ){
         cv::Point centar(cvRound(krugovi[i][0]), cvRound(krugovi[i][1]));
-        // centar kruga  
+        // centar kruga
         circle(kvadrat, centar, 3, cv::Scalar(0,255,0), -1, 8, 0 );
     }
     cv::imwrite("detektovan_centar.jpg",kvadrat);
@@ -131,7 +131,7 @@ std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img){
     std::vector<double> col;
 
     for(int i = 0; i < krugovi.size(); i++) {
-        
+
         bool nadjeno = false;
         int r = cvRound(krugovi[i][2]);
         prosek_r += r;
@@ -167,20 +167,20 @@ std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img){
     std::sort(col.begin(),col.end(),comparator2);
 
     for( int i = 0; i < row.size(); i++) {
-        
+
         double max = 0;
         double y = row[i];
         int ind = -1;
-    
+
         for(int j = 0; j < col.size(); j++) {
             double x = col[j];
             cv::Point c(x,y);
 
             for(int k = 0; k < krugovi.size(); k++){
-            
+
                 double x2 = krugovi[k][0];
                 double y2 = krugovi[k][1];
-            
+
                 if(abs(y2-y)<prosek_r && abs(x2-x)<prosek_r){
                     x = x2;
                     y = y2;

@@ -6,8 +6,11 @@
 #include <algorithm>
 #include <string>
 #include "image_processing.hpp"
+#include "mainwindow.h"
 #include "handler.hpp"
 #include <fstream>
+#include <QApplication>
+
 
 //funkcija za proveru gresaka
 void check_error(int expr, std::string & msg){
@@ -17,9 +20,13 @@ void check_error(int expr, std::string & msg){
     }
 }
 
+
 int main(int argc, char* argv[]){
 
-    
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
 
-    return 0;
+    return a.exec();
+
 }
