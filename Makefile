@@ -12,4 +12,4 @@ $(PROG):$(SRCS)
 .PHONY: clean
 
 clean:
-	rm *.o *.~ $(PROG)
+	rm *.o *.~ $(PROG) *.jpg

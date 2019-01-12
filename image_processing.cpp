@@ -2,6 +2,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include "image_processing.hpp"
 #include <iostream>
+#include <string>
 #include <vector>
 
 cv::Mat binarizacija(cv::Mat &img){
@@ -59,8 +60,9 @@ void sortirajCoskove(std::vector<cv::Point2f>& coskovi, cv::Point2f centar) {
 
 }
 
-void izolovanje_pravougaonika(cv::Mat & img){
+std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img){
 
+    std::vector<std::string> user_input;
     cv::Mat img_raw;
     cv::cvtColor(img, img_raw, CV_GRAY2RGB);
 
@@ -197,17 +199,19 @@ void izolovanje_pravougaonika(cv::Mat & img){
         }
         //stampanje resenja
         if(ind == -1) {
-            printf("%d:-",i+1);
+            user_input.push_back("-");
         }
-        else 
-            printf("%d:%c",i+1,'A'+ind);
-        std::cout << std::endl;
+        else {
+            const char c[2] = {'A' + ind, '\0'};
+            std::string stri(c);
+            user_input.push_back(stri);
+        }
     }
 
-
-    //cv::namedWindow("Centar kruga", CV_WINDOW_NORMAL);
-    //cv::resizeWindow("Centar kruga",600,600);
-    //cv::imshow("Centar kruga",kvadrat);
     cv::imwrite("final.jpg",kvadrat);
+    for(int i = 0; i < user_input.size(); i++){
+        std::cout << user_input[i] << std::endl;
+    }
+    return user_input;
 
 }

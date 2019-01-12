@@ -6,7 +6,7 @@
 
 
 cv::Mat binarizacija(cv::Mat & img);
-void izolovanje_pravougaonika(cv::Mat & img);
+std::vector<std::string> izolovanje_pravougaonika(cv::Mat & img);
 cv::Point2f izracunajPresek(cv::Vec4i a, cv::Vec4i b);
 void sortirajCoskove(std::vector<cv::Point2f>& corners, cv::Point2f center);
 bool comparator2(double a,double b);

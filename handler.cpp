@@ -30,3 +30,19 @@ std::vector<bool> compare_result(const std::vector<std::string> & user_input,con
 
     return result;   
 }
+
+std::vector<bool> process_result(std::string input_img_path){
+
+    //ucitavanje resenja
+    std::ifstream in_file("./test_input/resenje.txt");
+    //fali obrada greske
+    auto vektor_resenja = get_answers_from_file(in_file);
+
+    //ucitavanje slike
+    cv::Mat img = cv::imread(input_img_path, 0);
+
+    auto vektor_korisnikovog_unosa = izolovanje_pravougaonika(img);
+    auto rezultat = compare_result(vektor_korisnikovog_unosa, vektor_resenja);
+
+    return rezultat;
+}

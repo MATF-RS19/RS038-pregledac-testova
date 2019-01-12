@@ -6,5 +6,7 @@
 #include <fstream>
 
 std::vector<std::string> get_answers_from_file(std::ifstream & in_file);
+std::vector<bool> compare_result(const std::vector<std::string> & user_input,const std::vector<std::string> & answers);
+std::vector<bool> process_result(std::string input_img_path);
 
 #endif
